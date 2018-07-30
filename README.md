@@ -2,15 +2,25 @@
 
 > Vue.js with Typescript and Pug
 
-## Build Setup
+## Getting Started
 
 ``` bash
+# Clone repogisotyr
+git clone https://github.com/shunsukehondo/Vue-Typescript-Pug.git
+
+# Move into the directory
+cd Vue-Typescript-Pug
+
 # install dependencies
 npm install
 
 # serve with hot reload at localhost:8080
 npm run dev
+```
 
+## Build for production
+
+```
 # build for production with minification
 npm run build
 
@@ -18,4 +28,28 @@ npm run build
 npm run build --report
 ```
 
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+## Auto lint and format with VSCode
+
+You can check errors and coding style of your code in read-time using VSCode editor.
+
+1. Open Vue-Typescript-Pug with VSCode
+2. Install following extensions
+    1. Prettier
+    2. TSLint
+    3. Vetur
+    4. language-stylus
+3. Open User Settings (`cmd+,` on Mac) and overwrite it with the follows.
+
+```json
+{
+    "[typescript]": {
+        "editor.formatOnSave": true
+      },
+    "[vue]": {
+        "editor.formatOnSave": true
+      },
+    "[javascript]": {
+        "editor.formatOnSave": true
+    }
+}
+```
