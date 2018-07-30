@@ -1,5 +1,5 @@
 <template lang='pug'>
-#hello
+#index
   h1 {{ msg }}
 </template>
 
@@ -8,7 +8,7 @@ import Vue from 'vue';
 import Component from 'vue-class-component';
 
 @Component
-export default class HelloWorld extends Vue {
+export default class Index extends Vue {
   msg: string = 'Welcome to Vue + Typescript + Pug + Stylus!';
 }
 </script>
