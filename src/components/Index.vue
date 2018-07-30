@@ -35,19 +35,29 @@
     
     .row
       .s6.col
-        h2 Sell order
-        ul#sell-order-list
-          li(v-for='item in sellOrders')
-            p From: {{ item.from }}
-            p Amount: {{ item.amount }}
-            p Price(ETH): {{ item.price }}
+        ul#sell-order-list.collection.with-header
+          li.collection-item
+            h4 Sell orders
+          li(v-for='item in sellOrders').collection-item
+            div From: {{ item.from }}
+              span: a(href='#').secondary-content
+                i.material-icons send
+              br
+              span Amount {{ item.amount }}
+              br
+              span Price(ETH): {{ item.price }}
       .s6.col
-        h2 Buy order
-        ul#buy-order-list
-          li(v-for='item in buyOrders')
-            p From: {{ item.from }}
-            p Amount: {{ item.amount }}
-            p Price(ETH): {{ item.price }}
+        ul#buy-order-list.collection.with-header
+          li.collection-item
+            h4 Buy orders
+          li(v-for='item in buyOrders').collection-item
+            div From: {{ item.from }}
+              span: a(href='#').secondary-content
+                i.material-icons send
+              br
+              span Amount {{ item.amount }}
+              br
+              span Price(ETH): {{ item.price }}
         
   
 </template>
@@ -83,6 +93,8 @@ export default class Index extends Vue {
       price: 0.7,
     },
   ];
+
+  mounted() {}
 }
 </script>
 
