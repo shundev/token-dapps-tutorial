@@ -1,8 +1,7 @@
 import Vue, { AsyncComponent } from 'vue';
 import Router, { RouteConfig, Route, NavigationGuard } from 'vue-router';
 
-const Index: AsyncComponent = (): any =>
-  import('@/components/Index.vue');
+const Index: AsyncComponent = (): any => import('@/components/Index.vue');
 
 Vue.use(Router);
 

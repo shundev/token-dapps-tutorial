@@ -28,7 +28,8 @@
         ],
         "arrow-parens": false,
         "object-literal-sort-keys": false,
-        "prettier": true
+        "prettier": true,
+        "no-console": false
     },
   "rulesDirectory": [
       "tslint-plugin-prettier"
