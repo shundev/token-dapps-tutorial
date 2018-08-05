@@ -48,6 +48,16 @@ contract ERC20Token {
     uint256 private totalSupply_;
 
     /**
+     * Emitted when the ownership of token is transfered.
+     */
+    event Transfer(address indexed from, address indexed to, uint256 value);
+
+    /**
+     * Emitted when allowed to spend.
+     */
+    event Approval(address indexed owner, address indexed spender, uint256 value);
+
+    /**
      * constructor is a special function that is called to deploy the contract.
      * And it can be called only once when the contract is deployed.
      */
