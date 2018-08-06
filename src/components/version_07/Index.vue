@@ -55,13 +55,15 @@ export default class Index extends Vue {
   title = 'Token Viewer';
   name = 'My token';
   symbol = 'TKN';
-  totalSupply = 10000.0;
+  totalSupply = '10000.000000000000000000';
   address = '0x00000000000000000000';
-  balance = 0.0;
+  balance = '0.0';
   decimals = 0;
 
   // We define the type explicitly here because Typescript compiler gets angry :)
   transactions: string[] = [];
+
+  // The website where you can investgate transactions, addresses and so on.
   etherscan = 'https://ropsten.etherscan.io/tx/';
 
   /**
@@ -92,15 +94,15 @@ export default class Index extends Vue {
       .on('transactionHash', hash => {
         // Sending the transaction completed.
         this.transactions = [hash].concat(this.transactions);
+
+        // Clear the form
+        to.value = '';
+        amount.value = '';
       })
       .on('receipt', receipt => {
         // Mining completed.
         this.fetchBalance();
       });
-
-    // Clear the form
-    to.value = '';
-    amount.value = '';
   }
 
   /**
@@ -125,15 +127,16 @@ export default class Index extends Vue {
     // Common parameter that allways needed when interfact with blockchain.
     const param = { from: this.address };
 
-    // Fetch token name from blockchain
+    // Fetch token name, symbol & decimals from blockchain
     this.name = await token.methods.name().call(param);
-
-    // Fetch decimals for displaying balance correctly.
+    this.symbol = await token.methods.symbol().call(param);
     this.decimals = await token.methods.decimals().call(param);
 
     // Fetch total supply
     const totalSupply: number = await token.methods.totalSupply().call(param);
-    this.totalSupply = totalSupply / 10 ** this.decimals;
+    // You must handle very big and small number carefully to display correctly.
+    // You can use the default function for this because the token has the same decimals as Eth.
+    this.totalSupply = web3.utils.fromWei(totalSupply, 'ether');
 
     this.fetchBalance();
   }
@@ -143,7 +146,7 @@ export default class Index extends Vue {
     const balance: number = await token.methods
       .balanceOf(this.address)
       .call({ from: this.address });
-    this.balance = balance / 10 ** this.decimals;
+    this.balance = web3.utils.fromWei(balance, 'ether');
   }
 
   /**

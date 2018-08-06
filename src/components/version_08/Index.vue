@@ -67,8 +67,11 @@ export default class Index extends Vue {
   address = '0x00000000000000000000';
   balance = '0.0';
   decimals = 0;
+
   // We define the type explicitly here because Typescript compiler gets angry :)
   transactions: string[] = [];
+
+  // The website where you can investgate transactions, addresses and so on.
   etherscan = 'https://ropsten.etherscan.io/tx/';
 
   /**
@@ -97,6 +100,7 @@ export default class Index extends Vue {
       })
       .on('transactionHash', hash => {
         this.transactions = [hash].concat(this.transactions);
+        amount.value = '';
       })
       .on('receipt', receipt => {
         // Mining completed.
@@ -124,15 +128,15 @@ export default class Index extends Vue {
       .on('transactionHash', hash => {
         // Sending the transaction completed.
         this.transactions = [hash].concat(this.transactions);
+
+        // Clear the form
+        to.value = '';
+        amount.value = '';
       })
       .on('receipt', receipt => {
         // Mining completed.
         this.fetchBalance();
       });
-
-    // Clear the form
-    to.value = '';
-    amount.value = '';
   }
 
   /**
@@ -157,8 +161,9 @@ export default class Index extends Vue {
     // Common parameter that allways needed when interfact with blockchain.
     const param = { from: this.address };
 
-    // Fetch token name & decimals from blockchain
+    // Fetch token name, symbol & decimals from blockchain
     this.name = await token.methods.name().call(param);
+    this.symbol = await token.methods.symbol().call(param);
     this.decimals = await token.methods.decimals().call(param);
 
     // Fetch total supply
