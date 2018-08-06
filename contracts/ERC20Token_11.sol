@@ -8,12 +8,36 @@ pragma solidity^ 0.4.24;
  *     - allowance
  */
 
+/**
+ * Overflow / Underflow safe math
+ */
+library SafeMath {
+    function mul(uint256 a, uint256 b) internal pure returns (uint256 c) {
+        c = a * b;
+        require(c / a == b, "Overflow");
+        return c;
+    }
+
+    function sub(uint256 a, uint256 b) internal pure returns (uint256) {
+        require(b <= a, "Underflow");
+        return a - b;
+    }
+
+    function add(uint256 a, uint256 b) internal pure returns (uint256 c) {
+        c = a + b;
+        require(c >= a, "Overflow");
+        return c;
+    }
+}
 
 /**
  * Actual ERC20 that can be distributed.
  * It must implement all the ERC20Interface.
  */
 contract ERC20Token {
+    // Add SafeMath functions to uint256.
+    using SafeMath for uint256;
+
     /**
      * Token name
      */
@@ -66,6 +90,9 @@ contract ERC20Token {
         symbol = _symbol;
         decimals = _decimals;
         totalSupply_ = _initialSupply;
+
+        // Transfer all the tokens to msg.sender. It's YOU.
+        balances[msg.sender] = totalSupply_;
     }
 
     /**
@@ -77,11 +104,11 @@ contract ERC20Token {
     }
 
     /**
-     * Requried for ERC20.
-     * Get how many tokens to be allowed to be spend.
+     * Required for ERC20.
+     * Get the current balance of `owner`.
      */
-    function allowance(address owner, address spender) public view returns (uint256) {
-        return allowed[owner][spender];
+    function balanceOf(address owner) public view returns (uint256) {
+        return balances[owner];
     }
 
     /**
@@ -93,20 +120,19 @@ contract ERC20Token {
         require(value <= balances[msg.sender], "You don't have enough balance to transfer.");
         require(to != address(0), "You can't to transfer to 0x0. Please specify the recipient address `to`.");
 
-        balances[msg.sender] -= value;
-        balances[to] += value;
+        balances[msg.sender] = balances[msg.sender].sub(value);
+        balances[to] = balances[to].add(value);
         emit Transfer(msg.sender, to, value);
         return true;
     }
 
     /**
-     * Required for ERC20.
-     * Get the current balance of `owner`.
+     * Requried for ERC20.
+     * Get how many tokens to be allowed to be spend.
      */
-    function balanceOf(address owner) public view returns (uint256) {
-        return balances[owner];
+    function allowance(address owner, address spender) public view returns (uint256) {
+        return allowed[owner][spender];
     }
-
 
     /**
      * Required for ERC20.
@@ -127,9 +153,9 @@ contract ERC20Token {
         require(value <= allowed[from][msg.sender], "You're not allowed to spend `from`'s token.");
         require(to != address(0), "`to` address is empty.");
 
-        balances[from] -= value;
-        balances[to] += value;
-        allowed[from][msg.sender] -= value;
+        balances[from] = balances[from].sub(value);
+        balances[to] = balances[to].add(value);
+        allowed[from][msg.sender] = allowed[from][msg.sender].sub(value);
         emit Transfer(from, to, value);
         return true;
     }

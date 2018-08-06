@@ -37,7 +37,7 @@ contract ERC20Token {
     /**
      * Maps owner address to his balance
      */
-    mapping(address => uint256) balances;
+    mapping(address => uint256) private balances;
 
     constructor(string _name, string _symbol, uint8 _decimals, uint256 _initialSupply) public {
         name = _name;

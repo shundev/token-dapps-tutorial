@@ -67,7 +67,7 @@ contract ERC20Token {
     /**
      * Maps owner address to his balance
      */
-    mapping(address => uint256) balances;
+    mapping(address => uint256) private balances;
 
     constructor(string _name, string _symbol, uint8 _decimals, uint256 _initialSupply) public {
         name = _name;
@@ -105,7 +105,7 @@ contract ERC20Token {
         require(to != address(0), "You can't to transfer to 0x0. Please specify the recipient address `to`.");
 
         balances[msg.sender] = balances[msg.sender].sub(value);
-        balances[to] = balances[msg.sender].add(value);
+        balances[to] = balances[to].add(value);
         emit Transfer(msg.sender, to, value);
         return true;
     }

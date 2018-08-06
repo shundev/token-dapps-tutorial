@@ -39,6 +39,10 @@ contract ERC20Token {
         decimals = _decimals;
     }
 
+    /**
+     * Required for ERC20.
+     * Get the current balance of `owner`.
+     */
     function balanceOf(address owner) public view returns (uint256) {
         return balances[owner];
     }
