@@ -1,6 +1,6 @@
 pragma solidity ^0.4.24;
 
-contract ERC20Token {
+contract HelloWorld {
     string public message;
 
     function setName(string _message) public {
