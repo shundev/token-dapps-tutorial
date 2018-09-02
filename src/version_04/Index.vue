@@ -9,7 +9,7 @@ div
       li Name: {{ name }}
       li Total supply: {{ totalSupply }} {{ symbol }}
 
-  div  
+  div
     h2 Your account
     ul
       li Address: {{ address }}
@@ -20,8 +20,13 @@ div
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import Web3 from 'web3';
+import { Contract } from 'web3/types.d';
 
 import contractInfo from './contractInfo';
+
+// Accessible from all functions
+let web3: Web3;
+let token: Contract;
 
 @Component
 export default class Index extends Vue {
@@ -32,23 +37,21 @@ export default class Index extends Vue {
   totalSupply = '10000.000000000000000000';
   address = '0x00000000000000000000';
   balance = '0.0';
-  decimals = 0;
 
   /**
    * One of Vue life-cycle functions.
    * Called after all initialization of the Index Component is completed.
    */
   mounted() {
-    this.connectToBlockchainAndFetch();
+    this.fetchWeb3(() => {
+      this.fetchFromBlockchain();
+    });
   }
 
   /**
    * Connect to Ethereum blockchain and Fetch all data needed.
    */
-  async connectToBlockchainAndFetch() {
-    // Wait until web3 is found
-    const web3: Web3 = await this.fetchWeb3Async();
-
+  async fetchFromBlockchain() {
     // Wait until the user's accounts are found on MetaMask.
     const addresses: string[] = await web3.eth.getAccounts();
 
@@ -56,7 +59,7 @@ export default class Index extends Vue {
     this.address = addresses[0];
 
     // Initialize the Token contract
-    const token = new web3.eth.Contract(
+    token = new web3.eth.Contract(
       contractInfo.Token.abi,
       contractInfo.Token.address
     );
@@ -67,7 +70,6 @@ export default class Index extends Vue {
     // Fetch token name, symbol & decimals from blockchain
     this.name = await token.methods.name().call(param);
     this.symbol = await token.methods.symbol().call(param);
-    this.decimals = await token.methods.decimals().call(param);
 
     // Fetch total supply
     const totalSupply: number = await token.methods.totalSupply().call(param);
@@ -87,24 +89,24 @@ export default class Index extends Vue {
    * Find web3 inserted by the browser extension such as MetaMask.
    * web3 is a library to connect to Ethereum blockchain.
    */
-  async fetchWeb3Async(): Promise<Web3> {
-    return new Promise<Web3>((resolve, reject) => {
-      window.addEventListener('load', () => {
-        let web3 = window.web3;
-        if (typeof web3 !== 'undefined') {
-          // Use MetaMask as connector to Ethereum blockchain if it's installed the browser.
-          web3 = new Web3(web3.currentProvider);
-          console.log('web3 found.');
-          resolve(web3);
-        } else {
-          // Otherwise users cannot use this app.
-          alert(
-            'You need Mist, MetaMask or other Dapps browsers to use our Dapp.'
-          );
-          reject('Not found.');
-        }
-      });
+  fetchWeb3(onFinish: () => void) {
+    window.addEventListener('load', () => {
+      if (typeof window.web3 !== 'undefined') {
+        // Use MetaMask as connector to Ethereum blockchain if it's installed the browser.
+        web3 = new Web3(window.web3.currentProvider);
+        console.log('web3 found.');
+        onFinish();
+      } else {
+        // Otherwise users cannot use this app.
+        alert(
+          'You need Mist, MetaMask or other Dapps browsers to use our Dapp.'
+        );
+      }
     });
+  }
+
+  async awaitable(func: (resolve: () => void) => void): Promise<any> {
+    return new Promise(resolve => func(resolve));
   }
 }
 </script>
