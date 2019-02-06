@@ -2,6 +2,26 @@
 
 ## Getting Started
 
+Don't you have Node JS installed? First install it.
+
+On Ubuntu or OS X
+
+```bash
+sudo apt-get install -y nodejs
+sudo npm install n -g
+sudo n 11.8.0 # Current stable
+sudo ln -sf /usr/local/bin/node /usr/bin/node
+sudo apt-get purge -y nodejs
+node -v && npm -v
+```
+
+The output will be like:
+
+```bash
+v11.8.0
+6.5.0
+```
+
 ``` bash
 git clone https://github.com/shunsukehondo/token-dapps-tutorial.git
 cd token-dapps-tutorial
