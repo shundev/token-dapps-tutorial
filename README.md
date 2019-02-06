@@ -2,6 +2,8 @@
 
 ## Getting Started
 
+### Install NodeJS
+
 Don't you have Node JS installed? First install it.
 
 On Ubuntu or OS X
@@ -21,6 +23,8 @@ The output will be like:
 v11.8.0
 6.5.0
 ```
+
+### Install Token-Dapps-Tutorial
 
 ``` bash
 git clone https://github.com/shunsukehondo/token-dapps-tutorial.git
