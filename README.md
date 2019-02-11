@@ -6,7 +6,7 @@
 
 Don't you have Node JS installed? First install it.
 
-On Ubuntu or OS X
+On Ubuntu
 
 ```bash
 sudo apt-get install -y nodejs
@@ -14,6 +14,17 @@ sudo npm install n -g
 sudo n 11.8.0 # Current stable
 sudo ln -sf /usr/local/bin/node /usr/bin/node
 sudo apt-get purge -y nodejs
+node -v && npm -v
+```
+
+On OSX
+
+```bash
+brew install nodejs
+npm install n -g
+n 11.8.0 # Current stable
+sudo ln -sf /usr/local/bin/node /usr/bin/node
+brew uninstall nodejs
 node -v && npm -v
 ```
 
